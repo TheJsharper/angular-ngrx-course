@@ -9,6 +9,7 @@ import {environment} from '../../environments/environment';
 import {User} from "../model/user.model";
 import {AuthActionTypes, AuthActionsTypes} from "../auth/auth.actions";
 import {authReducer, AuthState} from "../auth/auth.reducer";
+import {routerReducer} from "@ngrx/router-store";
 
 
 
@@ -20,6 +21,7 @@ export interface AppState {
 
 export const reducers: ActionReducerMap<AppState> = {
  // auth: authReducer
+  router: routerReducer
 };
 
 

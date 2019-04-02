@@ -35,7 +35,7 @@ export class AppComponent implements OnInit {
 
   async logout(): Promise<void> {
     this.store.dispatch(new LogoutAction())
-    await this.router.navigateByUrl('/login');
+  //  await this.router.navigateByUrl('/login');
   }
 
 
