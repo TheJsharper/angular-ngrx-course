@@ -1,6 +1,3 @@
-
-
-
 import {Injectable} from "@angular/core";
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from "@angular/router";
 import {Course} from "../model/course";
@@ -9,24 +6,36 @@ import {CoursesService} from "./courses.service";
 import {AppState} from "../../reducers";
 import {select, Store} from "@ngrx/store";
 import {filter, first, tap} from "rxjs/operators";
-
+import {selectCourseById} from "../course.selectors";
+import {CourseRequested} from "../course.actions";
 
 
 @Injectable()
 export class CourseResolver implements Resolve<Course> {
 
-    constructor(
-        private coursesService:CoursesService,
-        private store: Store<AppState>) {
+  constructor(private coursesService: CoursesService,
+              private store: Store<AppState>) {
 
-    }
+  }
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Course> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Course> {
 
-        const courseId = route.params['id'];
-
-        return this.coursesService.findCourseById(courseId);
-    }
+    const courseId = route.params['id'];
+    const courses$: Observable<Course> = this.store.pipe(
+      select(<any>selectCourseById(courseId)),
+      tap((course: Course) => {
+        if (course == undefined) {
+          this.store.dispatch(new CourseRequested({courseId}))
+        }
+      }),
+      filter((course: Course) =>
+        (course != undefined)
+      ),
+      first()
+    )
+    return courses$;
+    //return this.coursesService.findCourseById(courseId);
+  }
 
 }
 
