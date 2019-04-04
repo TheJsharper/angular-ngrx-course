@@ -1,72 +1,72 @@
-import {Component, Inject, OnInit, ViewEncapsulation} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
-import {FormBuilder, Validators, FormGroup} from "@angular/forms";
+import {ChangeDetectionStrategy, Component, Inject, OnInit, ViewEncapsulation} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import {FormBuilder, Validators, FormGroup} from '@angular/forms';
 import * as moment from 'moment';
-import {Course} from "../model/course";
-import {CoursesService} from "../services/courses.service";
-import {AppState} from "../../reducers";
-import {Store} from "@ngrx/store";
-import {Update} from "@ngrx/entity";
-import {CourseSaved} from "../course.actions";
+import {Course} from '../model/course';
+import {CoursesService} from '../services/courses.service';
+import {AppState} from '../../reducers';
+import {Store} from '@ngrx/store';
+import {Update} from '@ngrx/entity';
+import {CourseSaved} from '../course.actions';
 
 @Component({
-    selector: 'course-dialog',
-    templateUrl: './course-dialog.component.html',
-    styleUrls: ['./course-dialog.component.css']
+  selector: 'course-dialog',
+  templateUrl: './course-dialog.component.html',
+  styleUrls: ['./course-dialog.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CourseDialogComponent implements OnInit {
 
-    courseId:number;
+  courseId: number;
 
-    form: FormGroup;
-    description:string;
+  form: FormGroup;
+  description: string;
 
-    constructor(
-        private store: Store<AppState>,
-        private coursesService: CoursesService,
-        private fb: FormBuilder,
-        private dialogRef: MatDialogRef<CourseDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) course:Course ) {
+  constructor(private store: Store<AppState>,
+              private coursesService: CoursesService,
+              private fb: FormBuilder,
+              private dialogRef: MatDialogRef<CourseDialogComponent>,
+              @Inject(MAT_DIALOG_DATA) course: Course) {
 
-        this.courseId = course.id;
+    this.courseId = course.id;
 
-        this.description = course.description;
-
-
-        this.form = fb.group({
-            description: [course.description, Validators.required],
-            category: [course.category, Validators.required],
-            longDescription: [course.longDescription,Validators.required],
-            promo: [course.promo, []]
-        });
-
-    }
-
-    ngOnInit() {
-
-    }
+    this.description = course.description;
 
 
-    save() {
+    this.form = fb.group({
+      description: [course.description, Validators.required],
+      category: [course.category, Validators.required],
+      longDescription: [course.longDescription, Validators.required],
+      promo: [course.promo, []]
+    });
 
-        const changes = this.form.value;
+  }
 
-        this.coursesService
-            .saveCourse(this.courseId, changes)
-            .subscribe(
-                () => {
-                  const course:Update<Course>={
-                    id: this.courseId,
-                    changes:changes,
-                  };
-                  this.store.dispatch(new CourseSaved({course}));
-                    this.dialogRef.close();
-                }
-            );
-    }
+  ngOnInit() {
 
-    close() {
-        this.dialogRef.close();
-    }
+  }
+
+
+  save() {
+
+    const changes = this.form.value;
+
+    this.coursesService
+      .saveCourse(this.courseId, changes)
+      .subscribe(
+        () => {
+          const course: Update<Course> = {
+            id: this.courseId,
+            changes: changes,
+          };
+          this.store.dispatch(new CourseSaved({course}));
+          this.dialogRef.close();
+        }
+      );
+  }
+
+  close() {
+    this.dialogRef.close();
+  }
 
 }

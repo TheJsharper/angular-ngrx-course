@@ -1,13 +1,18 @@
-import {Action} from "@ngrx/store";
-import {Course} from "./model/course";
-import {Update} from "@ngrx/entity";
+import {Action} from '@ngrx/store';
+import {Course} from './model/course';
+import {Update} from '@ngrx/entity';
+import {Lesson} from './model/lesson';
 
 export  enum CourseActionTypes {
-  CourseRequested = "[View Course Page] Course Requested",
-  CourseLoaded = "[Course API] Course Loaded",
-  AllCoursesRequested = "[Course Home Page] All Courses Requested",
-  AllCoursesLoaded = "[Courses API] All Courses Loaded",
-  CourseSaved="[Edit Course Dialog] Course Saved"
+  CourseRequested = '[View Course Page] Course Requested',
+  CourseLoaded = '[Course API] Course Loaded',
+  AllCoursesRequested = '[Course Home Page] All Courses Requested',
+  AllCoursesLoaded = '[Courses API] All Courses Loaded',
+  CourseSaved = '[Edit Course Dialog] Course Saved',
+
+  LessonsPageRequested = '[Course Landing Page] Lessons Page Requested',
+  LessonsPageLoaded = '[Courses API] Lessons Page Loaded',
+  LessonsPageCancelled = '[Course API] Lessons Page Cancelled'
 
 }
 
@@ -47,4 +52,35 @@ export class CourseSaved implements Action {
   }
 }
 
-export type CourseActions = CourseRequested | CourseLoaded | AllCoursesRequested | AllCoursesLoaded | CourseSaved;
+export interface PageQuery {
+  pageIndex: number;
+  pageSize: number;
+}
+
+export class LessonsPageRequested implements Action {
+  readonly type: string = CourseActionTypes.LessonsPageRequested.toString();
+
+  constructor(public payload: { courseId: number, page: PageQuery }) {
+  }
+}
+
+export class LessonsPageLoaded implements Action {
+  readonly type: string = CourseActionTypes.LessonsPageLoaded.toString();
+
+  constructor(public  payload: { lessons: Lesson[] }) {
+  }
+}
+
+export class LessonsPageCancelled implements Action {
+  readonly type: string = CourseActionTypes.LessonsPageCancelled.toString();
+}
+
+export type CourseActions =
+  CourseRequested
+  | CourseLoaded
+  | AllCoursesRequested
+  | AllCoursesLoaded
+  | CourseSaved
+  | LessonsPageRequested
+  | LessonsPageLoaded
+  | LessonsPageCancelled;
