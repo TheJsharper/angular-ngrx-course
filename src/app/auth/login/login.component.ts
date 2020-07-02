@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
       )
       .subscribe(
         noop,
-        () => alert('Login Failed')
+        (err) => alert('Login Failed')
       );
 
 

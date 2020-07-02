@@ -20,7 +20,7 @@ export function getCourseById(req: Request, res: Response) {
 
     const courses = Object.values(COURSES);
 
-    const course = courses.find(course => course.id == courseId);
+    const course = courses.find(course => course.id == parseInt(courseId));
 
     res.status(200).json(course);
 }
