@@ -30,13 +30,14 @@ import { AuthEffects } from './auth.effects';
     exports: [LoginComponent]
 })
 export class AuthModule {
-    static forRoot(): ModuleWithProviders {
-        return {
+    static forRoot(): ModuleWithProviders<AuthModule> {
+        const r =  {
             ngModule: AuthModule,
             providers: [
               AuthService,
               AuthGuard
             ]
-        }
+        };
+        return r;
     }
 }
