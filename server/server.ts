@@ -7,6 +7,7 @@ import {searchLessons} from "./search-lessons.route";
 import {loginUser} from "./auth.route";
 import {saveCourse} from "./save-course.route";
 import * as cors  from "cors";
+import { Server } from 'http';
 
 
 const bodyParser = require('body-parser');
@@ -32,8 +33,10 @@ app.route('/api/lessons').get(searchLessons);
 
 
 
-const httpServer = app.listen(9000, () => {
-    console.log("HTTP REST API Server running at http://localhost:" + httpServer.address().port);
+const httpServer:Server = app.listen(9000, () => {
+    console.log("HTTP REST API Server running at http://localhost:",  httpServer.address()
+
+    );
 });
 
 
